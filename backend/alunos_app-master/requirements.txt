@@ -1,0 +1,8 @@
+django-rest-swagger~=2.2.0
+django-rest-framework~=0.1.0
+Django~=3.1.5
+djangorestframework~=3.12.2
+pyyaml~=5.4
+django-cors-headers~=3.2.1
+djangorestframework-simplejwt~≃5.2.2
+pytest-drf~=3.0.7

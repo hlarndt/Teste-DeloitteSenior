@@ -1,8 +1,8 @@
 # vue-pagination-aluno
 
-Vue.js Simple Pagination Aluno
+Simple Pagination Aluno
 
 To run this portal execute:
 
 # npm install
-# npm run
+# npm start

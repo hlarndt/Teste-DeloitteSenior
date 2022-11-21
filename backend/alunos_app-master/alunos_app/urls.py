@@ -20,43 +20,25 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework import permissions
+from rest_framework.authentication import TokenAuthentication
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-schema_view = get_swagger_view(title='Alunos API')
-SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
-      'Basic': {
-            'type': 'basic'
-      },
-      'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-      }
-   }
-}
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API Alunos",
+        default_version='v.1.0',
+        description="Api responsável pelo gerenciamento de faturas",
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny]
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('alunos.urls')),
     path('login/', jwt_views.TokenObtainPairView.as_view()),    
     path('refresh-token/', jwt_views.TokenRefreshView.as_view()),
-    path('openapi/', get_schema_view(
-        title="Alunos API",
-        description="Alunos API",
-        public=True,
-        version="1.0",
-        permission_classes=[permissions.AllowAny]
-    ), name='openapi-schema'),
-    path('swagger/', TemplateView.as_view(
-        template_name='swagger.html',
-        extra_context={'schema_url': 'openapi-schema'},
-    
-    ), name='swagger-ui'),
-    path('swagger/', TemplateView.as_view(
-        template_name='swagger.html',
-        extra_context={'schema_url': 'openapi-schema'},
-    ), name='swagger-ui'),
-    path('redoc/', TemplateView.as_view(
-        template_name='redoc.html',
-        extra_context={'schema_url':'openapi-schema'}
-    ), name='redoc'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/',   schema_view.with_ui('redoc', cache_timeout=0),   name='schema-redoc'),
 ]

@@ -1,24 +1,33 @@
+from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAdminUser
+from rest_framework_simplejwt.tokens import AccessToken
 from .models import *
 from .serializers import *
 
-class AlunoList(generics.ListCreateAPIView,generics.UpdateAPIView,generics.DestroyAPIView):
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAdminUser])
+class AlunoList(generics.ListCreateAPIView,generics.UpdateAPIView,generics.DestroyAPIView): 
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
-    permission_classes = (IsAuthenticated,)
 
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAdminUser])
 class DisciplinaList(generics.ListCreateAPIView,generics.UpdateAPIView,generics.DestroyAPIView):
     queryset = Disciplina.objects.all()
     serializer_class = DisciplinaSerializer
-    permission_classes = (IsAuthenticated,)
 
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAdminUser])
 class BoletimList(generics.ListCreateAPIView,generics.UpdateAPIView,generics.DestroyAPIView):
     queryset = Boletim.objects.all()
     serializer_class = BoletimSerializer
-    permission_classes = (IsAuthenticated,)
 
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAdminUser])
 class NotasBoletimList(generics.ListCreateAPIView,generics.UpdateAPIView,generics.DestroyAPIView):
     queryset = NotasBoletim.objects.all()
     serializer_class = NotasBoletimSerializer
-    permission_classes = (IsAuthenticated,)

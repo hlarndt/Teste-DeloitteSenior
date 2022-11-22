@@ -1,27 +1,40 @@
 <script>
-// an example array of items to be paged
-import axios from 'axios';
-const dataItems = axios
-  .get("http://localhost:8081/api/aluno")
-  .then((res) => {
-          console.log(res.data)
-  })
-  .catch((error) => {
-          console.log(error);
-  });
-  
-console.log(dataItems);
+import { defineAsyncComponent } from "vue";
+
+const exampleItems = [...Array(300).keys()].map(i => ({ id: (i+1), name: 'Item ' + (i+1) }));
+
+const dataItems = {};
 
 export default {
+    async asyncData ({ $axios }) {
+        const user = 'admin';
+        const password = '060174';
+
+        const dataItems = await $axios.post(
+            'http://127.0.0.1:8081/login/',
+            {
+                'username': user,
+                'password': password
+            },
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        console.log(dataItems);
+        return { dataItems }
+    }, 
     data() {
         return {
+            exampleItems,
             dataItems,
             pageOfItems: []
         };
     },
     methods: {
         onChangePage(pageOfItems) {
-            // update page of items
             this.pageOfItems = pageOfItems;
         }
     }
@@ -31,10 +44,10 @@ export default {
     <div class="card text-center m-3">
         <h3 class="card-header">Paginação Aluno</h3>
         <div class="card-body">
-            <div v-for="item in pageOfItems" :key="item.nome">{{item.email}}</div>
+            <div v-for="item in pageOfItems" :key="item.id">{{item.name}}</div>
         </div>
         <div class="card-footer pb-0 pt-3">
-            <jw-pagination :items="dataItems.nome" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :items="exampleItems" @changePage="onChangePage" :pageSize="30"></jw-pagination>
         </div>
     </div>
 </template>
